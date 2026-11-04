@@ -1,0 +1,39 @@
+@startuml
+left to right direction
+actor "Utente autenticato" as User
+actor "Amministratore" as Admin
+actor "Utente avversario" as Opponent
+actor "Elaboratore / IA" as AI
+
+rectangle "Connect Four Backend" {
+  usecase "Registrazione" as UC1
+  usecase "Login JWT RS256" as UC2
+  usecase "Creare partita" as UC3
+  usecase "Giocare contro utente" as UC4
+  usecase "Giocare contro IA" as UC5
+  usecase "Effettuare una mossa" as UC6
+  usecase "Consultare stato partita" as UC7
+  usecase "Abbandonare partita" as UC8
+  usecase "Esportare storico JSON/PDF" as UC9
+  usecase "Consultare classifica pubblica" as UC10
+  usecase "Consultare statistiche personali" as UC11
+  usecase "Ricaricare credito" as UC12
+  usecase "Scadenza automatica turno" as UC13
+}
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC11
+User --> UC10
+UC3 .> UC4 : <<extend>>
+UC3 .> UC5 : <<extend>>
+Opponent --> UC6
+AI --> UC6
+User --> UC13
+Admin --> UC12
+Admin --|> User
+@enduml

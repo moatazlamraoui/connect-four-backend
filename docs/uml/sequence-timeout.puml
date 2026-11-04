@@ -1,0 +1,14 @@
+@startuml
+participant "Timeout Scheduler" as Scheduler
+participant "GameService" as Service
+participant "SQLite" as DB
+
+loop ogni secondo
+  Scheduler -> Service: settleAllExpiredGames()
+  Service -> DB: find IN_PROGRESS with deadlineAt <= now
+  DB --> Service: expired games
+  loop each expired game
+    Service -> DB: set status TIMEOUT, winner = other player
+  end
+end
+@enduml
