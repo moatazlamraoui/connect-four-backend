@@ -1,6 +1,6 @@
-# Connect Four – Backend for the Advanced Programming Exam
+# Connect Four 
 
-REST API for the **Advanced Programming exam, academic year 2025/2026**, built with **TypeScript**, **Express**, **Sequelize** and **SQLite**. It manages Connect Four games between two authenticated users (JWT) or between a user and the computer (AI).
+REST API for the **FONDAMENTI DI INFORMATICA exam, academic year 2025/2026**, built with **TypeScript**, **Express**, **Sequelize** and **SQLite**. It manages Connect Four games between two authenticated users (JWT) or between a user and the computer (AI).
 
 ## Table of Contents
 
