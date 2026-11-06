@@ -1,8 +1,9 @@
 node_modules
 dist
 .env
-keys/*.pem
-data/*.sqlite
-data/*.sqlite-*
+*.pem
+data
 coverage
 .git
+docs
+postman

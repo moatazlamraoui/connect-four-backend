@@ -1,0 +1,24 @@
+sequenceDiagram
+  actor U as Utente
+  participant R as Express Router
+  participant A as authenticate
+  participant C as requirePositiveCredits
+  participant V as validate (Zod)
+  participant S as GameService
+  participant DB as Sequelize / SQLite
+  U->>R: POST /api/games + Bearer JWT
+  R->>A: verifica JWT RS256
+  A->>DB: carica utente (sub)
+  DB-->>A: User
+  A->>C: req.user
+  C-->>R: credito > 0 (altrimenti 401)
+  R->>V: valida body (mode, opponentEmail, turnTimeSeconds)
+  V-->>R: input tipizzato (altrimenti 400)
+  R->>S: createGame(userId, input)
+  S->>DB: BEGIN transazione
+  S->>DB: credito sufficiente? (0.45 / 0.75, altrimenti 402)
+  S->>DB: creatore e avversario senza partita attiva? (altrimenti 409)
+  S->>DB: addebita 0.45 / 0.75 e INSERT Game
+  S->>DB: COMMIT
+  S-->>R: stato della partita
+  R-->>U: 201 Created + JSON

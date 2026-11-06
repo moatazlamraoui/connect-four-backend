@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Connect Four Exam Backend",
-    "description": "Requests for the Advanced Programming exam project. Set baseUrl, userToken and adminToken as collection variables.",
+    "description": "Requests for the Advanced Programming exam project. Run the seed first, then log in as alice / bob / admin: the test scripts store the tokens in the collection variables. Seed passwords are in .env.example.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -83,7 +83,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"ChangeMe_User_2026!\"\n}",
+          "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"Al1ce!Forza4-Play\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -166,6 +166,23 @@
           }
         },
         "url": "{{baseUrl}}/api/games/{{gameId}}/moves"
+      }
+    },
+    {
+      "name": "List my games",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{userToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": "{{baseUrl}}/api/games"
       }
     },
     {
@@ -259,7 +276,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"bob@example.com\",\n  \"password\": \"ChangeMe_User_2026!\"\n}",
+          "raw": "{\n  \"email\": \"bob@example.com\",\n  \"password\": \"B0b!Forza4-Play\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -377,6 +394,13 @@
       }
     },
     {
+      "name": "Public leaderboard descending",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/leaderboard?order=desc"
+      }
+    },
+    {
       "name": "Public leaderboard ascending",
       "request": {
         "method": "GET",
@@ -423,7 +447,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"ChangeMe_Admin_2026!\"\n}",
+          "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Adm1n!Forza4-Secure\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -434,7 +458,7 @@
       }
     },
     {
-      "name": "Admin set new credit balance",
+      "name": "Admin recharge: ADD credits to a user",
       "request": {
         "method": "PUT",
         "auth": {
@@ -455,7 +479,39 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"alice@example.com\",\n  \"newCredits\": 10.00\n}",
+          "raw": "{\n  \"email\": \"alice@example.com\",\n  \"credits\": 10.0,\n  \"mode\": \"add\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/admin/credits"
+      }
+    },
+    {
+      "name": "Admin recharge: SET balance of a user",
+      "request": {
+        "method": "PUT",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alice@example.com\",\n  \"credits\": 25.5,\n  \"mode\": \"set\"\n}",
           "options": {
             "raw": {
               "language": "json"

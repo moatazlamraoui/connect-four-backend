@@ -14,8 +14,10 @@
     "start": "node dist/src/server.js",
     "seed": "ts-node scripts/seed.ts",
     "test": "jest --runInBand",
-    "test:watch": "jest --watch",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "seed:passwords": "ts-node scripts/seed.ts --update-passwords",
+    "test:coverage": "jest --runInBand --coverage",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -42,6 +44,9 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.2",
     "@types/cors": "^2.8.17"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "allowScripts": {
     "sqlite3@5.1.7": true

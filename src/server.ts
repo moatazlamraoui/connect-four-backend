@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './config/env'; // must stay the first import: loads .env before anything reads process.env
 import './models/associations';
 import { app } from './app';
 import { initializeDatabase } from './config/database';

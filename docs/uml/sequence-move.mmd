@@ -1,0 +1,27 @@
+sequenceDiagram
+  actor U as Utente
+  participant R as Express Router
+  participant M as authenticate + validate + requireCreditsOrActiveGame
+  participant S as GameService
+  participant E as ConnectFourEngineAdapter
+  participant DB as Sequelize / SQLite
+  U->>R: POST /api/games/{id}/moves {column}
+  R->>M: JWT, id, body, credito/partita attiva
+  M-->>R: ok (401 / 400 altrimenti)
+  R->>S: makeMove(gameId, userId, column)
+  S->>DB: BEGIN, carica partita e mosse
+  S->>S: timeout scaduto? (in tal caso chiude la partita)
+  S->>S: è il turno dell'utente? (403 altrimenti)
+  S->>E: validateColumn(storico, column)
+  E-->>S: mossa lecita (409 altrimenti)
+  S->>DB: INSERT Move, addebita 0.05, aggiorna scacchiera
+  alt vittoria / scacchiera piena
+    S->>DB: status FINISHED / DRAW
+  else partita contro IA
+    S->>E: chooseAiColumn(storico, difficoltà)
+    E-->>S: colonna IA
+    S->>DB: INSERT Move IA, addebita 0.05 all'utente
+  end
+  S->>DB: UPDATE Game, COMMIT
+  S-->>R: stato aggiornato
+  R-->>U: 200 OK + JSON

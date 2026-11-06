@@ -5,5 +5,5 @@ module.exports = {
   roots: ['<rootDir>/tests'],
   testMatch: ['**/*.test.ts'],
   clearMocks: true,
-  collectCoverageFrom: ['src/middleware/**/*.ts']
+  collectCoverageFrom: ['src/middleware/**/*.ts', 'src/utils/**/*.ts', 'src/services/statsAggregator.ts', 'src/exporters/**/*.ts']
 };

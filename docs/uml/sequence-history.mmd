@@ -1,0 +1,19 @@
+sequenceDiagram
+  actor U as Utente
+  participant R as Express Router
+  participant V as validate (Zod)
+  participant H as HistoryService
+  participant F as historyExporters (Strategy)
+  participant DB as Sequelize / SQLite
+  U->>R: GET /api/games/{id}/history?format=pdf&period=7d
+  R->>V: valida id e query (format, from/to oppure period)
+  V-->>R: filtro tipizzato
+  R->>H: export(id, userId, filtro, response)
+  H->>DB: carica partita (solo i partecipanti) e mosse
+  H->>H: numera le mosse e applica l'intervallo di date
+  H->>F: historyExporters[format].send(report)
+  alt format = json
+    F-->>U: 200 application/json
+  else format = pdf
+    F-->>U: 200 application/pdf (PDFKit)
+  end

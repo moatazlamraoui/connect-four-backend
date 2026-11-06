@@ -1,0 +1,38 @@
+erDiagram
+  USER ||--o{ GAME : "player1 (crea)"
+  USER |o--o{ GAME : "player2 (avversario)"
+  USER |o--o{ GAME : "winner"
+  GAME ||--o{ MOVE : contiene
+  USER |o--o{ MOVE : "gioca (NULL = IA)"
+  USER {
+    int id PK
+    string username UK
+    string email UK
+    string password_hash
+    string role "user | admin"
+    decimal credits "10,2"
+  }
+  GAME {
+    int id PK
+    int player1_id FK
+    int player2_id FK "NULL se contro IA"
+    string mode "HUMAN_VS_HUMAN | HUMAN_VS_AI"
+    string status "IN_PROGRESS | FINISHED | ABANDONED | TIMEOUT | DRAW"
+    text board "JSON 6x7"
+    string current_turn "R | Y"
+    int winner_id FK
+    string winner_symbol
+    string end_reason
+    int turn_time_seconds "NULL = nessun limite"
+    datetime deadline_at
+    string ai_difficulty
+  }
+  MOVE {
+    int id PK
+    int game_id FK
+    int player_id FK
+    string player_symbol
+    int column "0-6"
+    boolean is_ai
+    datetime created_at
+  }

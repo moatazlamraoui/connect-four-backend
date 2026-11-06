@@ -1,0 +1,14 @@
+sequenceDiagram
+  participant W as Timeout watcher (ogni secondo)
+  participant S as GameService
+  participant DB as Sequelize / SQLite
+  actor U as Utente
+  loop ogni secondo
+    W->>S: settleAllExpiredGames()
+    S->>DB: SELECT partite IN_PROGRESS con deadlineAt <= now
+    DB-->>S: partite scadute
+    S->>DB: status TIMEOUT, vince l'avversario di chi doveva muovere
+  end
+  Note over S,DB: stesso controllo "pigro" anche in stato, mossa, abbandono e creazione partita
+  U->>S: GET /api/games/{id}
+  S-->>U: status TIMEOUT, vincitore, endReason

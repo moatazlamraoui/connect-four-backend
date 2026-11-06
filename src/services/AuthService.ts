@@ -2,14 +2,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import type { SignOptions } from 'jsonwebtoken';
 import { User } from '../models/User';
-import { AppError } from '../utils/AppError';
+import { ErrorFactory } from '../utils/ErrorFactory';
 import { readPrivateKey } from '../middleware/auth';
-
-export interface RegisterInput {
-  username: string;
-  email: string;
-  password: string;
-}
+import type { RegisterInput } from '../schemas';
 
 export class AuthService {
   static async register(input: RegisterInput): Promise<Record<string, unknown>> {
@@ -28,7 +23,7 @@ export class AuthService {
   static async login(email: string, password: string): Promise<{ token: string; user: Record<string, unknown> }> {
     const user = await User.findOne({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-      throw new AppError(401, 'Invalid email or password.');
+      throw ErrorFactory.unauthorized('Invalid email or password.');
     }
 
     // JWT payload deliberately contains only the user subject and role metadata.
@@ -41,12 +36,6 @@ export class AuthService {
   }
 
   static safeUser(user: User): Record<string, unknown> {
-    return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      credits: Number(user.credits)
-    };
+    return { id: user.id, username: user.username, email: user.email, role: user.role, credits: Number(user.credits) };
   }
 }

@@ -1,0 +1,17 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # This project currently has no package-lock.json, so npm cache is intentionally disabled.
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm test

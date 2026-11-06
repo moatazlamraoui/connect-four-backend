@@ -1,22 +1,28 @@
 import { Router } from 'express';
 import { User } from '../models/User';
 import { authenticate, requireAdmin } from '../middleware/auth';
-import { validate } from '../middleware/validate';
+import { getValidated, validate } from '../middleware/validate';
 import { rechargeSchema } from '../schemas';
-import { AppError } from '../utils/AppError';
+import type { RechargeInput } from '../schemas';
+import { ErrorFactory } from '../utils/ErrorFactory';
 import { asyncHandler } from '../utils/asyncHandler';
+import { readCredits, roundCredits } from '../utils/credits';
 
 const router = Router();
 router.use(authenticate, requireAdmin);
 
-/** Sets the user's balance to the new value supplied by the administrator. */
+/**
+ * Recharges a user identified by e-mail.
+ *  mode "add" (default): balance = balance + credits
+ *  mode "set": balance = credits
+ */
 router.put('/credits', validate(rechargeSchema), asyncHandler(async (req, res) => {
-  const input = req.validatedBody as { email: string; newCredits: number };
-  const user = await User.findOne({ where: { email: input.email } });
-  if (!user) throw new AppError(404, 'User with the supplied email was not found.');
-  user.credits = Math.round(input.newCredits * 100) / 100;
+  const { email, credits, mode } = getValidated<RechargeInput>(req, 'body');
+  const user = await User.findOne({ where: { email } });
+  if (!user) throw ErrorFactory.notFound('User with the supplied email was not found.');
+  user.credits = mode === 'add' ? roundCredits(readCredits(user.credits) + credits) : roundCredits(credits);
   await user.save();
-  res.json({ message: 'Credit balance updated.', email: user.email, credits: Number(user.credits) });
+  res.json({ message: 'Credit balance updated.', email: user.email, mode, credits: Number(user.credits) });
 }));
 
 export default router;

@@ -1,0 +1,20 @@
+flowchart LR
+  anon([Visitatore anonimo])
+  user([Utente autenticato])
+  admin(["Amministratore<br/>(è anche un utente autenticato)"])
+  ai([Elaboratore / IA])
+  timer([Timer di turno])
+
+  anon --> UC1(Registrazione)
+  anon --> UC2(Login - JWT RS256)
+  anon --> UC10(Consultare classifica pubblica)
+  user --> UC3(Creare partita)
+  user --> UC4(Effettuare una mossa)
+  user --> UC5(Consultare stato partita)
+  user --> UC6(Abbandonare partita)
+  user --> UC7(Storico mosse JSON / PDF)
+  user --> UC8(Statistiche personali)
+  UC4 -. "include, se contro IA" .-> UC12(Mossa dell'IA)
+  ai --> UC12
+  timer --> UC11(Chiusura per timeout del turno)
+  admin --> UC9(Ricaricare credito di un utente)
