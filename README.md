@@ -1,6 +1,6 @@
-# Connect Four – Backend per l'esame di Programmazione Avanzata
+# Connect Four – Backend per FONDAMENTI DI INFORMATICA
 
-REST API per l'esame di **Programmazione Avanzata A.A. 2025/2026**, realizzata in **TypeScript** con **Express**, **Sequelize** e **SQLite**. Gestisce partite di Forza Quattro tra due utenti autenticati (JWT) oppure tra un utente e l'elaboratore (IA).
+REST API per l'esame di **FONDAMENTI DI INFORMATICA A.A. 2025/2026**, realizzata in **TypeScript** con **Express**, **Sequelize** e **SQLite**. Gestisce partite di Forza Quattro tra due utenti autenticati (JWT) oppure tra un utente e l'elaboratore (IA).
 
 ## Indice
 
